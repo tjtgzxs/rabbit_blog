@@ -1,0 +1,48 @@
+version: '3'
+services:
+  nginx:
+    image: nginx:latest
+    ports:
+      - "3456:80"
+    depends_on:
+      - "php"
+    volumes:
+    - "$PWD/conf.d:/etc/nginx/conf.d"
+    - "$PWD/../:/var/www/html"
+    container_name: "wordpress-nginx"
+    links:
+      - php:php
+    networks:
+      - frontend
+  php:
+    build: ./php-mysqli
+    image: php:7.2-fpm-wordpress
+    ports:
+    - "9000:9000"
+    volumes:
+      - "$PWD/../:/var/www/html"
+    container_name: "wordpress-php"
+    links:
+      - mysql:mysql
+    networks:
+      - frontend
+      - backend
+  mysql:
+    image: mysql:5.7
+    ports:
+      - "33066:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=lkjhPOIUY
+    container_name: "wordpress-mysql"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - backend
+volumes:
+  mysql_data:
+networks:
+  frontend:
+  backend:
+
+
+

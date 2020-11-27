@@ -1,0 +1,4 @@
+<?php
+echo "hello world";
+$conn = mysqli_connect("mysql", "root","lkjhPOIUY",'test');
+var_dump($conn->query("SELECT * FROM test")->fetch_all());
